@@ -357,50 +357,64 @@
     <div class="row">
       <div class="contact-holder col-lg-8 offset-lg-2 col-sm-8 offset-sm-2">
         <h1 class="wow fadeInUp" data-wow-duration="1.5s">{{ .Title | markdownify}}</h1>
-        <form name="contact" method="POST" data-netlify="true" id="contact-form">
+        <div id="form-toast" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.85); color:#fff; padding:30px 50px; border-radius:12px; z-index:99999; text-align:center; font-size:18px; font-weight:500; box-shadow:0 4px 30px rgba(0,0,0,0.3); transition:opacity 0.4s ease;">
+          Submission Success!
+        </div>
+        <form id="contact-form" method="POST" action="/" data-netlify="true" name="contact" style="display:none;">
+          <input type="hidden" name="form-name" value="contact">
+          <input type="hidden" name="username" id="hidden-username">
+          <input type="hidden" name="email" id="hidden-email">
+          <input type="hidden" name="message" id="hidden-message">
+        </form>
+        <form id="contact-form-visible">
           <div class="form-container row wow fadeInUp" data-wow-duration="1.5s">
             <div class="form-group col-lg-6">
-              <input class="form-control" type="text" name="username" id="username" placeholder="{{.Params.name}}"
-                required>
+              <input class="form-control" type="text" id="input-username" placeholder="{{.Params.name}}" required>
               <div class="help-block with-errors"></div>
             </div>
             <div class="form-group col-lg-6">
-              <input class="form-control" type="email" id="email" name="email" placeholder="{{.Params.email}}" required>
+              <input class="form-control" type="email" id="input-email" placeholder="{{.Params.email}}" required>
               <div class="help-block with-errors"></div>
             </div>
             <div class="form-group col-lg-12">
-              <textarea class="form-control" name="message" id="message" rows="12"
-                placeholder="{{.Params.message}}"></textarea>
+              <textarea class="form-control" id="input-message" rows="12" placeholder="{{.Params.message}}"></textarea>
               <div class="help-block with-errors"></div>
             </div>
             <div class="form-group col-lg-12 sub-button">
               <button class="submit form-control hvr-icon-push" type="submit" value="send"> {{.Params.submit}} </button>
             </div>
-            <div id="form-success" style="display:none; width:100%; text-align:center; margin-top:20px;">
-              <p style="color:#4CAF50; font-size:18px; font-weight:600;">Message sent successfully!</p>
-            </div>
           </div>
         </form>
         <script>
-          document.getElementById('contact-form').addEventListener('submit', function(e) {
+          document.getElementById('contact-form-visible').addEventListener('submit', function(e) {
             e.preventDefault();
-            var form = this;
-            var formData = new FormData(form);
+            e.stopPropagation();
+            var username = document.getElementById('input-username').value;
+            var email = document.getElementById('input-email').value;
+            var message = document.getElementById('input-message').value;
+            if (!username || !email) return;
+            var body = 'form-name=contact&username=' + encodeURIComponent(username) + '&email=' + encodeURIComponent(email) + '&message=' + encodeURIComponent(message);
             fetch('/', {
               method: 'POST',
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams(formData).toString()
-            }).then(function(response) {
-              if (response.ok) {
-                form.reset();
-                document.getElementById('form-success').style.display = 'block';
+              body: body
+            }).then(function(res) {
+              if (res.ok) {
+                document.getElementById('input-username').value = '';
+                document.getElementById('input-email').value = '';
+                document.getElementById('input-message').value = '';
+                var toast = document.getElementById('form-toast');
+                toast.style.display = 'block';
+                toast.style.opacity = '1';
                 setTimeout(function() {
-                  document.getElementById('form-success').style.display = 'none';
-                }, 5000);
+                  toast.style.opacity = '0';
+                  setTimeout(function() { toast.style.display = 'none'; }, 400);
+                }, 3000);
               }
-            }).catch(function(error) {
+            }).catch(function() {
               alert('Something went wrong. Please try again.');
             });
+            return false;
           });
         </script>
       </div>
