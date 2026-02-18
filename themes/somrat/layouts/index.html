@@ -402,16 +402,16 @@
                 document.getElementById('input-username').value = '';
                 document.getElementById('input-email').value = '';
                 document.getElementById('input-message').value = '';
-                var toast = document.getElementById('form-toast');
-                toast.style.display = 'block';
+                var toast = document.createElement('div');
+                toast.innerHTML = '<span style="color:rgba(255,255,255,0.7);font-size:14px;font-weight:300;letter-spacing:3px;text-transform:uppercase;">message sent</span>';
+                toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483647;background:rgba(20,20,20,0.75);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:8px;padding:44px 60px;text-align:center;opacity:0;transition:opacity 1.5s ease;';
+                document.body.appendChild(toast);
                 requestAnimationFrame(function() {
-                  requestAnimationFrame(function() {
-                    toast.classList.add('visible');
-                  });
+                  requestAnimationFrame(function() { toast.style.opacity = '1'; });
                 });
                 setTimeout(function() {
-                  toast.classList.remove('visible');
-                  setTimeout(function() { toast.style.display = 'none'; }, 1500);
+                  toast.style.opacity = '0';
+                  setTimeout(function() { document.body.removeChild(toast); }, 1500);
                 }, 3500);
               });
               return false;
