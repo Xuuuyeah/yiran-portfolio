@@ -357,7 +357,7 @@
     <div class="row">
       <div class="contact-holder col-lg-8 offset-lg-2 col-sm-8 offset-sm-2">
         <h1 class="wow fadeInUp" data-wow-duration="1.5s">{{ .Title | markdownify}}</h1>
-        <form name="contact" method="POST" data-netlify="true" action="{{ .Params.form_action }}" data-toggle="validator">
+        <form name="contact" method="POST" data-netlify="true" id="contact-form">
           <div class="form-container row wow fadeInUp" data-wow-duration="1.5s">
             <div class="form-group col-lg-6">
               <input class="form-control" type="text" name="username" id="username" placeholder="{{.Params.name}}"
@@ -376,8 +376,33 @@
             <div class="form-group col-lg-12 sub-button">
               <button class="submit form-control hvr-icon-push" type="submit" value="send"> {{.Params.submit}} </button>
             </div>
+            <div id="form-success" style="display:none; width:100%; text-align:center; margin-top:20px;">
+              <p style="color:#4CAF50; font-size:18px; font-weight:600;">Message sent successfully!</p>
+            </div>
           </div>
         </form>
+        <script>
+          document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var formData = new FormData(form);
+            fetch('/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams(formData).toString()
+            }).then(function(response) {
+              if (response.ok) {
+                form.reset();
+                document.getElementById('form-success').style.display = 'block';
+                setTimeout(function() {
+                  document.getElementById('form-success').style.display = 'none';
+                }, 5000);
+              }
+            }).catch(function(error) {
+              alert('Something went wrong. Please try again.');
+            });
+          });
+        </script>
       </div>
     </div>
     <div class="row">
