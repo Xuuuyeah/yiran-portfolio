@@ -1,7 +1,7 @@
 ---
 title : "GET IN TOUCH"
 bg_image: "images/backgrounds/contact-us-bg.jpg"
-form_action: "#"
+form_action: "/"
 name: "Name"
 email: "Email"
 message: "Message"
