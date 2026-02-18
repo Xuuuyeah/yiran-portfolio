@@ -12,6 +12,33 @@
 	{{- partialCached "footer.html" . -}}
 	{{ end }}
 	{{- partialCached "script.html" . -}}
+<style>
+#form-toast {
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 8px;
+  padding: 44px 60px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+#form-toast.visible { opacity: 1; }
+#form-toast span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+</style>
+<div id="form-toast"><span>message sent</span></div>
 </body>
 
 </html>

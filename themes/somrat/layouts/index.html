@@ -357,37 +357,6 @@
     <div class="row">
       <div class="contact-holder col-lg-8 offset-lg-2 col-sm-8 offset-sm-2">
         <h1 class="wow fadeInUp" data-wow-duration="1.5s">{{ .Title | markdownify}}</h1>
-        <style>
-          #form-toast {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 99999;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 8px;
-            padding: 40px 56px;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 1.2s ease;
-          }
-          #form-toast.visible {
-            opacity: 1;
-          }
-          #form-toast span {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 15px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-          }
-        </style>
-        <div id="form-toast">
-          <span>message sent</span>
-        </div>
         <form id="contact-form" method="POST" action="/" data-netlify="true" name="contact" style="display:none;">
           <input type="hidden" name="form-name" value="contact">
           <input type="hidden" name="username">
@@ -414,36 +383,40 @@
           </div>
         </form>
         <script>
-          document.getElementById('contact-form-visible').addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var username = document.getElementById('input-username').value;
-            var email = document.getElementById('input-email').value;
-            var message = document.getElementById('input-message').value;
-            if (!username || !email) return;
-            var body = 'form-name=contact&username=' + encodeURIComponent(username) + '&email=' + encodeURIComponent(email) + '&message=' + encodeURIComponent(message);
-            fetch('/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: body
-            }).then(function(res) {
-              if (res.ok) {
+          (function() {
+            var form = document.getElementById('contact-form-visible');
+            if (!form) return;
+            form.onsubmit = function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              var username = document.getElementById('input-username').value;
+              var email = document.getElementById('input-email').value;
+              var message = document.getElementById('input-message').value;
+              if (!username || !email) return false;
+              var body = 'form-name=contact&username=' + encodeURIComponent(username) + '&email=' + encodeURIComponent(email) + '&message=' + encodeURIComponent(message);
+              fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+              }).then(function() {
                 document.getElementById('input-username').value = '';
                 document.getElementById('input-email').value = '';
                 document.getElementById('input-message').value = '';
                 var toast = document.getElementById('form-toast');
                 toast.style.display = 'block';
-                setTimeout(function() { toast.classList.add('visible'); }, 20);
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    toast.classList.add('visible');
+                  });
+                });
                 setTimeout(function() {
                   toast.classList.remove('visible');
-                  setTimeout(function() { toast.style.display = 'none'; }, 1200);
-                }, 3200);
-              }
-            }).catch(function() {
-              alert('Something went wrong. Please try again.');
-            });
-            return false;
-          });
+                  setTimeout(function() { toast.style.display = 'none'; }, 1500);
+                }, 3500);
+              });
+              return false;
+            };
+          })();
         </script>
       </div>
     </div>
