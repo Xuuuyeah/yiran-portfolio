@@ -403,8 +403,8 @@
                 document.getElementById('input-email').value = '';
                 document.getElementById('input-message').value = '';
                 var toast = document.createElement('div');
-                toast.innerHTML = '<span style="color:rgba(255,255,255,0.7);font-size:14px;font-weight:300;letter-spacing:3px;text-transform:uppercase;">message sent</span>';
-                toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483647;background:rgba(20,20,20,0.75);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:8px;padding:44px 60px;text-align:center;opacity:0;transition:opacity 1.5s ease;';
+                toast.innerHTML = '<span style="color:rgba(80,80,80,0.6);font-size:13px;font-weight:400;letter-spacing:4px;text-transform:uppercase;">message sent</span>';
+                toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2147483647;background:rgba(245,245,245,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:6px;padding:28px 52px;text-align:center;opacity:0;transition:opacity 1.5s ease;box-shadow:0 2px 20px rgba(0,0,0,0.06);';
                 document.body.appendChild(toast);
                 requestAnimationFrame(function() {
                   requestAnimationFrame(function() { toast.style.opacity = '1'; });
