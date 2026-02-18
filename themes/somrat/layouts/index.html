@@ -357,14 +357,86 @@
     <div class="row">
       <div class="contact-holder col-lg-8 offset-lg-2 col-sm-8 offset-sm-2">
         <h1 class="wow fadeInUp" data-wow-duration="1.5s">{{ .Title | markdownify}}</h1>
-        <div id="form-toast" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.85); color:#fff; padding:30px 50px; border-radius:12px; z-index:99999; text-align:center; font-size:18px; font-weight:500; box-shadow:0 4px 30px rgba(0,0,0,0.3); transition:opacity 0.4s ease;">
-          Submission Success!
+        <style>
+          @keyframes toastIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          }
+          @keyframes toastOut {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+          }
+          #form-toast-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 99998;
+          }
+          #form-toast {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            z-index: 99999;
+            background: rgba(240, 240, 240, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 48px 64px;
+            text-align: center;
+            box-shadow: 0 8px 60px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.08);
+            opacity: 0;
+          }
+          #form-toast.show {
+            animation: toastIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+          #form-toast.hide {
+            animation: toastOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+          #form-toast .toast-check {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e0e0, #d0d0d0);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+          }
+          #form-toast .toast-check svg {
+            width: 22px; height: 22px;
+            stroke: #555;
+            stroke-width: 2.5;
+            fill: none;
+          }
+          #form-toast h3 {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 0 0 8px 0;
+          }
+          #form-toast p {
+            color: #888;
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0;
+            letter-spacing: 0.3px;
+          }
+        </style>
+        <div id="form-toast-overlay"></div>
+        <div id="form-toast">
+          <div class="toast-check">
+            <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"></polyline></svg>
+          </div>
+          <h3>Submission Success</h3>
+          <p>Thank you for reaching out.</p>
         </div>
         <form id="contact-form" method="POST" action="/" data-netlify="true" name="contact" style="display:none;">
           <input type="hidden" name="form-name" value="contact">
-          <input type="hidden" name="username" id="hidden-username">
-          <input type="hidden" name="email" id="hidden-email">
-          <input type="hidden" name="message" id="hidden-message">
+          <input type="hidden" name="username">
+          <input type="hidden" name="email">
+          <input type="hidden" name="message">
         </form>
         <form id="contact-form-visible">
           <div class="form-container row wow fadeInUp" data-wow-duration="1.5s">
@@ -403,13 +475,16 @@
                 document.getElementById('input-username').value = '';
                 document.getElementById('input-email').value = '';
                 document.getElementById('input-message').value = '';
+                var overlay = document.getElementById('form-toast-overlay');
                 var toast = document.getElementById('form-toast');
+                overlay.style.display = 'block';
                 toast.style.display = 'block';
-                toast.style.opacity = '1';
+                toast.className = 'show';
                 setTimeout(function() {
-                  toast.style.opacity = '0';
-                  setTimeout(function() { toast.style.display = 'none'; }, 400);
-                }, 3000);
+                  toast.className = 'hide';
+                  overlay.style.display = 'none';
+                  setTimeout(function() { toast.style.display = 'none'; toast.className = ''; }, 600);
+                }, 2000);
               }
             }).catch(function() {
               alert('Something went wrong. Please try again.');
