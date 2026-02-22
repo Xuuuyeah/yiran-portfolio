@@ -1,8 +1,8 @@
 ---
-title : "I'm Yiran"
+title : "I'm Yiran Xu"
 # full screen navigation
 first_name : "Yiran"
-last_name : ""
+last_name : "Xu"
 bg_image : "images/backgrounds/full-nav-bg.jpg"
 # animated text loop
 occupations:
