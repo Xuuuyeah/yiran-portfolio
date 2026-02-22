@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://subtle-travesseiro-f8d79b.netlify.app"
+baseURL = "https://yiran-portfolio.netlify.app"
 title = "Yiran | Data Scientist & Biologist"
 theme = "somrat"
 # post pagination
